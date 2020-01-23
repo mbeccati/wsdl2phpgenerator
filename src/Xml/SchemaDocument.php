@@ -70,7 +70,10 @@ class SchemaDocument extends XmlNode
                                 '//s:import/@schemaLocation|' .
                                 '//s:include/@schemaLocation') as $reference) {
             $referenceUrl = $reference->value;
-            if (strpos($referenceUrl, '//') === false) {
+
+            if (strpos($referenceUrl, '/') === 0) {
+                $referenceUrl = preg_replace('#^(https?://[^/]+).*$#', '$1', $xsdUrl).$referenceUrl;
+            } elseif (strpos($referenceUrl, '//') === false) {
                 $referenceUrl = dirname($xsdUrl) . '/' . $referenceUrl;
             }
 
